@@ -1,0 +1,5 @@
+main.js
+output/
+.purs-repl
+node_modules/
+.pre-commit-config.yaml
