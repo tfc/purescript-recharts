@@ -4,6 +4,13 @@ import Data.Nullable (Nullable)
 import Prim.Row (class Union)
 import React.Basic.Hooks (JSX, ReactComponent, element)
 
+{- All these bindings are basically deduced from the Recharts API Documentation:
+  https://recharts.org/en-US/api
+
+  It contains the bare minimum that is needed to get the Main.purs to run with
+  the example charts.
+-}
+
 type Props_legend =
   ( width :: Nullable Int
   , height :: Nullable Int
@@ -14,7 +21,7 @@ legend
    . Union attrs attrs_ Props_legend
   => Record attrs
   -> JSX
-legend = element _legend 
+legend = element _legend
 
 foreign import _legend :: forall attrs. ReactComponent attrs
 
@@ -23,7 +30,7 @@ tooltip
    . Union attrs attrs_ ()
   => Record attrs
   -> JSX
-tooltip = element _tooltip 
+tooltip = element _tooltip
 
 foreign import _tooltip :: forall attrs. ReactComponent attrs
 
@@ -105,7 +112,7 @@ pieChart
    . Union attrs attrs_ Props_pieChart
   => Record attrs
   -> JSX
-pieChart = element _pieChart 
+pieChart = element _pieChart
 
 foreign import _pieChart :: forall attrs. ReactComponent attrs
 
@@ -129,7 +136,7 @@ pie
    . Union attrs attrs_ Props_pie
   => Record attrs
   -> JSX
-pie = element _pie 
+pie = element _pie
 
 foreign import _pie :: forall attrs. ReactComponent attrs
 

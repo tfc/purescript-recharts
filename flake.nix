@@ -20,8 +20,11 @@
       systems = [ "x86_64-linux" ];
       perSystem = { config, self', inputs', pkgs', system, ... }:
         let
+          pkgs = import nixpkgs { inherit system; };
           purs-nix = self.inputs.purs-nix { inherit system; };
+
           ps = purs-nix.purs {
+            inherit (pkgs) nodejs purescript;
             dependencies = with purs-nix.ps-pkgs; [
               affjax
               affjax-web
@@ -36,11 +39,9 @@
             ];
 
             dir = ./.;
+
           };
-
-          pkgs = import nixpkgs { inherit system; };
         in
-
         {
           apps.default = {
             type = "app";
@@ -65,6 +66,14 @@
 
             shellHook = ''
               ${config.checks.pre-commit-check.shellHook}
+
+              trap "pkill -f simple-http-server" EXIT
+              # runs this in a subshell for the trap to kill
+              (purs-nix compile
+              ln -sf $PWD/bundle.js $PWD/web/bundle.js
+              simple-http-server -p 8000 -s --nocache -i -- $PWD/web 0<&- &
+              )
+              alias watch="find $PWD/src | entr -s 'echo bundling; purs-nix bundle'"
             '';
           };
 

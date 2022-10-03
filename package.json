@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "react": "^18.2.0",
     "recharts": "^2.1.14",
     "url": "^0.11.0",
     "xhr2": "^0.2.1"

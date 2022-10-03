@@ -1,22 +1,14 @@
 module Main where
 
 import Prelude
-
-import Affjax.ResponseFormat as ResponseFormat
-import Affjax.StatusCode (StatusCode(..))
-import Affjax.Web as Affjax
-import Data.Either (Either(..))
 import Data.Maybe (Maybe(..))
 import Data.Nullable (notNull)
 import Effect (Effect)
 import Effect.Exception (throw)
+import React.Basic (JSX)
 import React.Basic.DOM as R
 import React.Basic.DOM.Client (createRoot, renderRoot)
-import React.Basic.Hooks (Component, component)
 import Recharts as RC
-import React.Basic.Hooks (element)
-import React.Basic.Hooks as React
-import React.Basic.Hooks.Aff (useAff)
 import Web.DOM.NonElementParentNode (getElementById)
 import Web.HTML (window)
 import Web.HTML.HTMLDocument (toNonElementParentNode)
@@ -34,8 +26,17 @@ main = do
     Nothing -> throw "Could not find root."
     Just container -> do
       reactRoot <- createRoot container
-      renderRoot reactRoot lineChart
+      renderRoot reactRoot app
 
+app :: JSX
+app = R.div_
+  [ R.h1_ [ R.text "Pie Chart" ]
+  , pieChart
+  , R.h1_ [ R.text "Line Chart" ]
+  , lineChart
+  ]
+
+pieChart :: JSX
 pieChart = RC.pieChart
   { width: 100
   , height: 100
@@ -56,10 +57,11 @@ pieChart = RC.pieChart
       ]
   }
 
+lineChart :: JSX
 lineChart = RC.lineChart
   { width: 1000
   , height: 300
-  , data: 
+  , data:
       [ { name: "a", val: 10 }
       , { name: "a", val: 12 }
       , { name: "a", val: 8 }
