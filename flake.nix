@@ -4,6 +4,10 @@
   inputs = {
     flake-parts.url = "github:hercules-ci/flake-parts";
     nixpkgs.url = "github:nixos/nixpkgs";
+    npmlock2nix-src = {
+      flake = false;
+      url = "github:nix-community/npmlock2nix";
+    };
     pre-commit-hooks.url = "github:tfc/pre-commit-hooks.nix?ref=purs-tidy";
     pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs";
     purs-nix.url = "github:ursi/purs-nix";
@@ -13,6 +17,7 @@
     { self
     , flake-parts
     , nixpkgs
+    , npmlock2nix-src
     , pre-commit-hooks
     , purs-nix
     }:
@@ -22,6 +27,13 @@
         let
           pkgs = import nixpkgs { inherit system; };
           purs-nix = self.inputs.purs-nix { inherit system; };
+          npmlock2nix = import npmlock2nix-src { inherit pkgs; };
+
+          nodeModules =
+            let
+              nm = npmlock2nix.node_modules { src = ./.; };
+            in
+            "${nm}/node_modules";
 
           ps = purs-nix.purs {
             inherit (pkgs) nodejs purescript;
@@ -40,18 +52,34 @@
 
             dir = ./.;
 
+            foreign."React.Basic".node_modules = nodeModules;
+            foreign."React.Basic.DOM".node_modules = nodeModules;
+            foreign."React.Basic.DOM.Client".node_modules = nodeModules;
+            foreign."React.Basic.DOM.Internal".node_modules = nodeModules;
+            foreign."Recharts".node_modules = nodeModules;
           };
         in
         {
-          apps.default = {
-            type = "app";
-            program = "${config.packages.default}/bin/ps-recharts";
+          apps = {
+            default = config.apps.serve-ui;
+            serve-ui = {
+              type = "app";
+              program = "${pkgs.writeShellApplication {
+                          name = "serve-purescript-recharts";
+                          runtimeInputs = [ pkgs.simple-http-server ];
+                          text = "simple-http-server --nocache -i -- ${config.packages.dist}";
+                        }}/bin/serve-purescript-recharts";
+            };
           };
 
-          packages = with ps.modules.Main; {
-            default = app { name = "ps-recharts"; };
-            bundle = bundle { };
-            output = output { };
+          packages = {
+            default = config.packages.dist;
+            bundle = ps.modules.Main.bundle { };
+            dist = pkgs.runCommand "purescript-recharts-dist" { } ''
+              mkdir -p $out
+              cp -r ${./web}/* $out/
+              cat ${config.packages.bundle} > $out/main.js
+            '';
           };
 
           devShells.default = pkgs.mkShell {
