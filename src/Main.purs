@@ -2,7 +2,6 @@ module Main where
 
 import Prelude
 import Data.Maybe (Maybe(..))
-import Data.Nullable (notNull)
 import Effect (Effect)
 import Effect.Exception (throw)
 import React.Basic (JSX)
@@ -33,7 +32,7 @@ app = R.div_
   [ R.h1_ [ R.text "Pie Chart" ]
   , pieChart
   , R.h1_ [ R.text "Line Chart" ]
-  , lineChart
+  , RC.responsiveContainer { width: "100%", height: 400, children: [ lineChart ] }
   ]
 
 pieChart :: JSX
@@ -59,9 +58,7 @@ pieChart = RC.pieChart
 
 lineChart :: JSX
 lineChart = RC.lineChart
-  { width: 1000
-  , height: 300
-  , data:
+  { data:
       [ { name: "a", val: 10 }
       , { name: "a", val: 12 }
       , { name: "a", val: 8 }
@@ -78,8 +75,8 @@ lineChart = RC.lineChart
   , children:
       [ RC.cartesianGrid {}
       , RC.xaxis {}
-      , RC.yaxis { dataKey: notNull "val" }
-      , RC.line { dataKey: "val", type: notNull "monotone" }
+      , RC.yaxis { dataKey: "val" }
+      , RC.line { dataKey: "val", type: "monotone" }
       , RC.legend {}
       , RC.tooltip {}
       ]

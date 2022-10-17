@@ -1,6 +1,10 @@
-export 
-  { CartesianGrid as _cartesianGrid
-  , Legend as _legend 
+export
+  { Area as _area
+  , AreaChart as _areaChart
+  , Brush as _brush
+  , CartesianGrid as _cartesianGrid
+  , ComposedChart as _composedChart
+  , Legend as _legend
   , Line as _line
   , LineChart as _lineChart
   , Pie as _pie
@@ -8,4 +12,5 @@ export
   , Tooltip as _tooltip
   , XAxis as _xaxis
   , YAxis as _yaxis
+  , ResponsiveContainer as _responsiveContainer
   } from "recharts"

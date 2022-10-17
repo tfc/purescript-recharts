@@ -50,7 +50,11 @@
               react-basic-dom
             ];
 
-            dir = ./.;
+            dir = pkgs.lib.sourceByRegex ./. [
+              "^src.*"
+              "^package.json$"
+              "^package-lock.json$"
+            ];
 
             foreign."React.Basic".node_modules = nodeModules;
             foreign."React.Basic.DOM".node_modules = nodeModules;
@@ -64,11 +68,15 @@
             default = config.apps.serve-ui;
             serve-ui = {
               type = "app";
-              program = "${pkgs.writeShellApplication {
-                          name = "serve-purescript-recharts";
-                          runtimeInputs = [ pkgs.simple-http-server ];
-                          text = "simple-http-server --nocache -i -- ${config.packages.dist}";
-                        }}/bin/serve-purescript-recharts";
+              program =
+                let
+                  drv = pkgs.writeShellApplication {
+                    name = "serve-purescript-recharts";
+                    runtimeInputs = [ pkgs.simple-http-server ];
+                    text = "simple-http-server --nocache -i -- ${config.packages.dist}";
+                  };
+                in
+                "${drv}/bin/serve-purescript-recharts";
             };
           };
 
@@ -89,19 +97,10 @@
               purs-nix.esbuild
               purs-nix.purescript
               simple-http-server
-              nodePackages.purs-tidy
             ];
 
             shellHook = ''
               ${config.checks.pre-commit-check.shellHook}
-
-              trap "pkill -f simple-http-server" EXIT
-              # runs this in a subshell for the trap to kill
-              (purs-nix compile
-              ln -sf $PWD/bundle.js $PWD/web/bundle.js
-              simple-http-server -p 8000 -s --nocache -i -- $PWD/web 0<&- &
-              )
-              alias watch="find $PWD/src | entr -s 'echo bundling; purs-nix bundle'"
             '';
           };
 
