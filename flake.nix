@@ -60,7 +60,7 @@
             foreign."React.Basic.DOM".node_modules = nodeModules;
             foreign."React.Basic.DOM.Client".node_modules = nodeModules;
             foreign."React.Basic.DOM.Internal".node_modules = nodeModules;
-            foreign."Recharts".node_modules = nodeModules;
+            foreign."Foreign.Recharts".node_modules = nodeModules;
           };
         in
         {

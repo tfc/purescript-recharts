@@ -1,4 +1,4 @@
-module Recharts where
+module Foreign.Recharts where
 
 -- moving this module to `Foreign.Recharts`/ the file to Foreign/Rechars.* leads
 -- to a crashing ResponsiveContainer for some reason.

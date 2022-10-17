@@ -7,7 +7,7 @@ import Effect.Exception (throw)
 import React.Basic (JSX)
 import React.Basic.DOM as R
 import React.Basic.DOM.Client (createRoot, renderRoot)
-import Recharts as RC
+import Foreign.Recharts as RC
 import Web.DOM.NonElementParentNode (getElementById)
 import Web.HTML (window)
 import Web.HTML.HTMLDocument (toNonElementParentNode)
