@@ -13,6 +13,7 @@
       perSystem = { config, pkgs, system, ... }: {
         devShells.default = pkgs.mkShell {
           nativeBuildInputs = with pkgs; [
+            nodePackages.bower
             nodePackages.npm-check-updates
             nodePackages.purescript-language-server
             nodePackages.purs-tidy
