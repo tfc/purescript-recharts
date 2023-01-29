@@ -1,0 +1,7 @@
+.psci_modules
+.purs-repl
+.spago
+dist
+generated-docs
+node_modules
+output

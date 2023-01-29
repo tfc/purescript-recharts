@@ -1,4 +1,4 @@
-module Foreign.Recharts where
+module Recharts where
 
 -- moving this module to `Foreign.Recharts`/ the file to Foreign/Rechars.* leads
 -- to a crashing ResponsiveContainer for some reason.
@@ -24,9 +24,15 @@ legend = element _legend
 
 foreign import _legend ∷ ∀ attrs. ReactComponent attrs
 
+type Props_tooltip a b =
+  ( formatter ∷ a
+  , isAnimationActive ∷ Boolean
+  , labelFormatter ∷ b
+  )
+
 tooltip
-  ∷ ∀ attrs attrs_
-  . Union attrs attrs_ ()
+  ∷ ∀ attrs attrs_ a b
+  . Union attrs attrs_ (Props_tooltip a b)
   ⇒ Record attrs
   → JSX
 tooltip = element _tooltip
@@ -61,8 +67,11 @@ foreign import _brush ∷ ∀ attrs. ReactComponent attrs
 
 type Props_axis a b =
   ( dataKey ∷ String
-  , domain ∷ (Array String)
-  , tickFormatter ∷ (a → b)
+  , domain ∷ Array String
+  , tickFormatter ∷ a → b
+  , angle ∷ Number
+  , unit ∷ String
+  , type ∷ String -- "number" or "category"
   )
 
 xaxis
@@ -92,19 +101,23 @@ cartesianGrid = element _cartesianGrid
 
 foreign import _cartesianGrid ∷ ∀ attrs. ReactComponent attrs
 
-type Props_line =
+type Props_line a =
   ( type ∷ String
+  , data ∷ Array a
   , dataKey ∷ String
   , stroke ∷ String
   , dot ∷ Boolean
+  , activeDot ∷ Boolean
   , name ∷ String
   , fill ∷ String
   , fillOpacity ∷ String
+  , unit ∷ String
+  , isAnimationActive ∷ Boolean
   )
 
 line
-  ∷ ∀ attrs attrs_
-  . Union attrs attrs_ Props_line
+  ∷ ∀ attrs attrs_ a
+  . Union attrs attrs_ (Props_line a)
   ⇒ Record attrs
   → JSX
 line = element _line
@@ -117,6 +130,8 @@ type Props_lineChart a =
   , data ∷ Array a
   , children ∷ Array JSX
   , syncId ∷ String
+  , onMouseMove ∷ EventHandler
+  , onMouseOut ∷ EventHandler
   )
 
 lineChart
@@ -129,8 +144,8 @@ lineChart = element _lineChart
 foreign import _lineChart ∷ ∀ attrs. ReactComponent attrs
 
 area
-  ∷ ∀ attrs attrs_
-  . Union attrs attrs_ Props_line
+  ∷ ∀ attrs attrs_ a
+  . Union attrs attrs_ (Props_line a)
   ⇒ Record attrs
   → JSX
 area = element _area
@@ -209,3 +224,39 @@ responsiveContainer
 responsiveContainer = element _responsiveContainer
 
 foreign import _responsiveContainer ∷ ∀ attrs. ReactComponent attrs
+
+type Props_referenceLine =
+  ( y ∷ String
+  , x ∷ String
+  , label ∷ String
+  , stroke ∷ String
+  , strokeDashArray ∷ String
+  )
+
+referenceLine
+  ∷ ∀ attrs attrs_
+  . Union attrs attrs_ Props_referenceLine
+  ⇒ Record attrs
+  → JSX
+referenceLine = element _referenceLine
+
+foreign import _referenceLine ∷ ∀ attrs. ReactComponent attrs
+
+type Props_referenceDot =
+  ( y ∷ String
+  , x ∷ String
+  , label ∷ String
+  , stroke ∷ String
+  , r ∷ String
+  , fill ∷ String
+  )
+
+referenceDot
+  ∷ ∀ attrs attrs_
+  . Union attrs attrs_ Props_referenceDot
+  ⇒ Record attrs
+  → JSX
+referenceDot = element _referenceDot
+
+foreign import _referenceDot ∷ ∀ attrs. ReactComponent attrs
+

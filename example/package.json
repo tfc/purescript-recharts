@@ -1,0 +1,20 @@
+{
+  "name": "purescript-recharts-example",
+  "scripts": {
+    "build": "spago build && node build.mjs",
+    "serve": "http-server dist",
+    "clean": "rm -rf dist node_modules output generated-docs .spago .psci_modules .purs-repl"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "recharts": "^2.3.2",
+    "xhr2": "^0.2.1"
+  },
+  "devDependencies": {
+    "url": "^0.11.0",
+    "esbuild": "^0.17.5",
+    "esbuild-plugin-purescript": "^1.1.1",
+    "http-server": "^14.1.1"
+  }
+}

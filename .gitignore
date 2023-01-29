@@ -1,6 +1,6 @@
 .pre-commit-config.yaml
 .psci_modules/
 .purs-repl
-main.js
+.spago
 node_modules/
 output/

@@ -9,8 +9,11 @@ export
   , LineChart as _lineChart
   , Pie as _pie
   , PieChart as _pieChart
+  , ReferenceDot as _referenceDot
+  , ReferenceLine as _referenceLine
   , Tooltip as _tooltip
   , XAxis as _xaxis
   , YAxis as _yaxis
   , ResponsiveContainer as _responsiveContainer
   } from "recharts"
+
