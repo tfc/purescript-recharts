@@ -72,6 +72,7 @@ type Props_axis a b =
   , angle ∷ Number
   , unit ∷ String
   , type ∷ String -- "number" or "category"
+  , width ∷ Number
   )
 
 xaxis
@@ -259,4 +260,3 @@ referenceDot
 referenceDot = element _referenceDot
 
 foreign import _referenceDot ∷ ∀ attrs. ReactComponent attrs
-
